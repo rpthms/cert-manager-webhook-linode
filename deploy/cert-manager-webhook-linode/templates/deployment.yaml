@@ -34,9 +34,9 @@ spec:
             - name: GROUP_NAME
               value: {{ .Values.api.groupName | quote }}
             - name: POD_SECRET_NAME
-              value: {{ .Values.deployment.secretName | quote }} 
+              value: {{ .Values.deployment.secretName | quote }}
             - name: POD_SECRET_KEY
-              value: {{ .Values.deployment.secretKey | quote }} 
+              value: {{ .Values.deployment.secretKey | quote }}
           ports:
             - name: https
               containerPort: 443
@@ -57,6 +57,10 @@ spec:
               readOnly: true
           resources:
 {{ toYaml .Values.resources | indent 12 }}
+{{- if .Values.deployment.imagePullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.deployment.imagePullSecret | quote }}
+{{- end }}
       volumes:
         - name: certs
           secret:
